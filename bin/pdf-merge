@@ -1,0 +1,17 @@
+#!/bin/bash
+
+[[ $# -gt 2 ]] || { echo -e "Usage: pdf-merge [OUT] PDF PDF [PDF ..]"; exit 0; }
+hash gs 2>/dev/null || { echo "Ghostscript binary (gs) required in PATH" >&2; exit 1; }
+
+if [[ -e $1 ]]; then
+    OUT=$(basename $1 .pdf).merged.pdf
+else
+    OUT=$1;
+    shift;
+fi;
+
+echo "Merging $# PDFs into $OUT" >&2;
+
+gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite \
+-sOutputFile=$OUT $@;
+

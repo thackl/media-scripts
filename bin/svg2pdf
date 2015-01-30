@@ -1,0 +1,12 @@
+#!/bin/bash
+if [[ $# -eq 0 ]]; then
+    echo -e "Usage:\n  svg2pdf SVG [SVG ..]";
+    exit 0;
+fi;
+
+hash inkscape 2>/dev/null || { echo "inkscape in PATH required" >&2; exit 1;}
+
+for i in $@; do
+    echo "Converting $i" >&2; 
+    inkscape --without-gui --export-area-drawing --export-pdf="$(basename $i .svg).pdf" $i
+done
