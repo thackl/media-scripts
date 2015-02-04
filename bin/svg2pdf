@@ -4,9 +4,11 @@ if [[ $# -eq 0 ]]; then
     exit 0;
 fi;
 
-hash inkscape 2>/dev/null || { echo "inkscape in PATH required" >&2; exit 1;}
+hash inkscape 2>/dev/null || { echo "inkscape in PATH required" 1>&2; exit 1; }
 
 for i in $@; do
-    echo "Converting $i" >&2; 
-    inkscape --without-gui --export-area-drawing --export-pdf="$(basename $i .svg).pdf" $i
-done
+    echo "Converting $i" >&2;
+    p=$(basename ${i%.*});
+    inkscape --without-gui --export-area-drawing --export-pdf="$p.pdf" $i 2>/dev/null;
+    [[ $? -eq 0 ]] || { echo "FATAL error trying to convert $i" 1>&2; exit 1; } 
+done;
