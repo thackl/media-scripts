@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+PDF=$1;
+shift;
+
+PRE=`basename $PDF .pdf`;
+
+for PAGE in $@; do
+    FROM=${PAGE%-*}
+    TO=${PAGE#*-}
+    #echo $FROM - $TO
+    gs -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -dFirstPage=$FROM -dLastPage=$TO -sOutputFile=$PRE-$FROM-$TO.pdf $PDF
+done;
